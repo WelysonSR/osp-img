@@ -2,6 +2,7 @@ let express = require("express");
 let app = express();
 let mongoose = require("mongoose");
 let user = require("./models/User");
+let bcrypt =require("bcrypt");
 
 
 app.use(express.urlencoded({extended: false}));
@@ -36,10 +37,14 @@ app.post("/user",async (req,res)=>{
             return;
         }
 
+        let password = req.body.password;
+        let salt = await bcrypt.genSalt(10);
+        let hash = await bcrypt.hash(password,salt);
+        
         let newUser = new User({
             name:req.body.name,
             email:req.body.email,
-            password:req.body.password
+            password:hash
         });
         await newUser.save();
         res.json({email: req.body.email});
