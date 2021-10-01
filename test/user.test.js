@@ -13,12 +13,10 @@ describe("Cadastro de usuário",()=>{
         return request.post("/user")
         .send(user)
         .then(res =>{
-
-            expect(res.body.email).toEqual(email);
             expect(res.statusCode).toEqual(200);
-
+            expect(res.body.email).toEqual(email);
         }).catch(err =>{
-            fail(err);
+            throw new Error(err);
         });
 
     });
